@@ -1,0 +1,84 @@
+﻿@startuml
+
+class Author {
+    public int Id { get; set; }
+    __
+    public string Name { get; set; }
+    __
+    public DateTime Created { get; set; }
+}
+
+class BookInfo {
+    public int Id { get; set; }
+    __
+    public string Name { get; set; }
+    __
+    public int AuthorId { get; set; }
+    __
+    public DateTime Created { get; set; }
+}
+
+class Publisher {
+    public int Id { get; set; }
+    __
+    public string Name { get; set; }
+    __
+    public DateTime Created { get; set; }
+}
+
+class Book {
+    public int Id { get; set; }
+    __
+    public int BookInfoId { get; set; }
+    __
+    public int PublisherId { get; set; }
+    __
+    public int Year { get; set;  }
+    __
+    public DateTime Created  { get; set; }
+}
+
+class BookInStock {
+    public int Id { get; set; }
+    __
+    public int BookId { get; set; }
+    __
+    public int Amount { get; set; }
+}
+class BookInAbonement{
+public int id
+__
+public int abonementId
+__
+public int BookInStockId
+__
+public DateTime borrowDate
+__
+public DateTime returnDate
+__
+public DateTime factReturnDate
+}
+class User{
+public int Id
+--
+public string Name 
+}
+class Abonement{
+public int Id
+__
+public int UserId
+__
+public string Name
+__
+public int Number
+}
+
+BookInAbonement::abonementId -- Abonement
+BookInAbonement::BookInStockId -- BookInStock
+BookInfo::AuthorId -- Author
+Book::BookInfoId -- BookInfo
+Book::PublisherId -- Publisher
+BookInStock::BookId -- Book
+Abonement::UserId -- User
+
+@enduml
