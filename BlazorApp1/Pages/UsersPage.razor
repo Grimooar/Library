@@ -1,0 +1,34 @@
+﻿@page "/UsersPage"
+@using ClassLibrary1
+<h3>Users</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private UserDto[]? Users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string baseAddress = "https://localhost:7119/";
+        var httpClient = new HttpClient() { BaseAddress = new Uri(baseAddress) };
+        Users = await httpClient.GetFromJsonAsync<UserDto[]>("api/user");
+    }
+}
