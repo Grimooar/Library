@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
+using ClassLibrary1;
 using Kirel.Repositories.Interfaces;
 using Kirel.Repositories.Sorts;
-using Microsoft.EntityFrameworkCore;
-using WebApi.DbContext;
-using WebApi.DTOs;
 using WebApi.Models;
 
 namespace WebApi.Service;

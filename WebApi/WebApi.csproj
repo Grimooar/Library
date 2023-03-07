@@ -20,6 +20,7 @@
     <PackageReference Include="Kirel.Repositories" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.14" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.0" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.0" />
@@ -40,8 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Page" />
-    <Folder Include="Repository" />
+    <ProjectReference Include="..\DtosLibrary\DtosLibrary.csproj" />
   </ItemGroup>
+
+
 
 </Project>

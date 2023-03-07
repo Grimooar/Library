@@ -1,6 +1,4 @@
-﻿using WebApi.NewDbContext;
-
-namespace WebApi.DbContext;
+﻿namespace WebApi.NewDbContext;
 
 public class ApplicationDbInitialize
 {

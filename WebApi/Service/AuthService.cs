@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using ClassLibrary1;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using WebApi.DTOs;
 using WebApi.Models;
 
 namespace WebApi.Service
@@ -83,8 +79,9 @@ namespace WebApi.Service
         {
             var user = new User
             {
-                UserName = userDto.UserNames,
-                UserNames = userDto.UserNames,
+                UserName = userDto.UserName,
+                
+                
                 Name = userDto.Name,
                 LastName = userDto.LastName,
                 Created = DateTime.UtcNow,

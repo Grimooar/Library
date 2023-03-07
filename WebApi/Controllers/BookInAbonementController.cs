@@ -1,8 +1,7 @@
-﻿using FluentValidation;
+﻿using ClassLibrary1;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.DTOs;
-using WebApi.Models;
 using WebApi.Service;
 using WebApi.Validators;
 

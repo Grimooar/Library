@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using ClassLibrary1;
+using FluentValidation;
 using Kirel.Repositories.Interfaces;
-using WebApi.DTOs;
 using WebApi.Models;
 
 namespace WebApi.Validators;

@@ -1,6 +1,5 @@
 ﻿using Kirel.Repositories.Interfaces;
-using MessagePack;
-using KeyAttribute = System.ComponentModel.DataAnnotations.KeyAttribute;
+
 namespace WebApi.Models;
 
 public class Publisher : ICreatedAtTrackedEntity, IKeyEntity<int>

@@ -1,21 +1,20 @@
 
+using System.Configuration;
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Kirel.Repositories.Infrastructure.Generics;
 using Kirel.Repositories.Interfaces;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using WebApi.Controllers;
 using WebApi.DbContext;
 using WebApi.Models;
 using WebApi.NewDbContext;
-
-
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using WebApi.Service;
 using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
@@ -154,7 +153,7 @@ class Program
         ApplicationDbInitialize.Initialize(app.Services.GetRequiredService<IServiceProvider>().CreateScope().ServiceProvider);
       
         app.UseAuthentication();
-       
+        app.UseCors("DevCorsPolicy");
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
@@ -170,14 +169,34 @@ class Program
         
         app.UseHttpsRedirection();
 
+      
+     
+
         
 
+       
+        
         app.MapControllers();
 
         app.Run();
     }
     
-   
+    
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddCors(); // Make sure you call this previous to AddMvc
+        services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        // Make sure you call this before calling app.UseMvc()
+        app.UseCors(
+            options => options.WithOrigins("http://localhost:7194").AllowAnyMethod()
+        );
+       
+    }
+
 
 }
 

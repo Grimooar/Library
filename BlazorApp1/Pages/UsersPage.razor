@@ -15,7 +15,7 @@
         {
             <tr>
                 <td>@user.Id</td>
-                <td>@user.Name</td>
+                <td>@user.UserName</td>
                 <td>@user.Email</td>
             </tr>
         }
@@ -23,12 +23,12 @@
 </table>
 
 @code {
-    private UserDto[]? Users;
+    private UserDto[] Users;
 
     protected override async Task OnInitializedAsync()
     {
         string baseAddress = "https://localhost:7119/";
         var httpClient = new HttpClient() { BaseAddress = new Uri(baseAddress) };
-        Users = await httpClient.GetFromJsonAsync<UserDto[]>("api/user");
+        Users = await httpClient.GetFromJsonAsync<UserDto[]>("api/User");
     }
 }

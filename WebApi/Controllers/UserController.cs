@@ -1,12 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 using AutoMapper;
+using ClassLibrary1;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using WebApi.DTOs;
-using WebApi.Models;
 using WebApi.Service;
 using WebApi.Validators;
 

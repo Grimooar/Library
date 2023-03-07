@@ -1,11 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
+using ClassLibrary1;
 using Kirel.Repositories.Interfaces;
 using Kirel.Repositories.Sorts;
-using Microsoft.IdentityModel.Tokens;
-using WebApi.DTOs;
 using WebApi.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,17 +10,17 @@ namespace WebApi.Service;
 public class UserService
 {
     private readonly IKirelGenericEntityFrameworkRepository<int, User> _repository;
- 
+
     private readonly IKirelGenericEntityFrameworkRepository<int, BookInAbonement> _abonementRepository;
 
     private readonly IMapper _mapper;
 
-    public UserService(IKirelGenericEntityFrameworkRepository<int, User> repository, IMapper mapper, IKirelGenericEntityFrameworkRepository<int, BookInAbonement> abonementRepository)
+    public UserService(IKirelGenericEntityFrameworkRepository<int, User> repository, IMapper mapper,
+        IKirelGenericEntityFrameworkRepository<int, BookInAbonement> abonementRepository)
     {
         _repository = repository;
         _mapper = mapper;
         _abonementRepository = abonementRepository;
-      
     }
 
     public async Task<IEnumerable<UserDto>> GetAll()
@@ -56,30 +52,27 @@ public class UserService
         _repository.Insert(user);
     }
 
-  
 
-
-    public async Task<BookInAbonementDto> Update(UserDto entity,int id)
+    public async Task<BookInAbonementDto> Update(UserDto entity, int id)
     {
         var bookAbonement = await _repository.GetById(id);
         _mapper.Map(entity, bookAbonement);
         await _repository.Update(bookAbonement!);
-        return  _mapper.Map<BookInAbonementDto>(bookAbonement);
+        return _mapper.Map<BookInAbonementDto>(bookAbonement);
     }
 
     public async Task Delete(int id)
     {
         var UserinAbonement = await _abonementRepository.GetList(x => x.Id == id, x => x.OrderBy(y => y.Created));
         var user = await _repository.GetById(id);
-        
-        if(user == null) return;
+
+        if (user == null) return;
         if (UserinAbonement.Any())
         {
             throw new Exception("User cannot be deleted as it is in use");
         }
-        
-        await  _repository.Delete(user.Id);
-      
+
+        await _repository.Delete(user.Id);
     }
 
     public async Task DeleteAll()
@@ -94,7 +87,7 @@ public class UserService
             await _repository.Delete(publisher.Id);
         }
     }
-  
+
     public async Task RegisterUserAsync(UserDto userDto)
     {
         // Check if user with same email already exists
@@ -108,7 +101,6 @@ public class UserService
         var user = _mapper.Map<User>(userDto);
         user.Created = DateTime.UtcNow;
         await _repository.Insert(user);
-        
     }
 
     public async Task<IdentityUser> GetUserByEmailAsync(string email)
@@ -118,15 +110,15 @@ public class UserService
         {
             return null;
         }
+
         var user = users.FirstOrDefault();
         return new IdentityUser
         {
             Id = user.Id.ToString(),
             UserName = user.UserName,
-            
+
             Email = user.Email,
             PasswordHash = user.Password
         };
     }
-
 }
