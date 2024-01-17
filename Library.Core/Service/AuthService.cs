@@ -3,37 +3,37 @@ using System.Security.Claims;
 using System.Text;
 using ClassLibrary1;
 using Library.Models;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Claim = System.Security.Claims.Claim;
 
 namespace Library.Core.Service
 {
     public class AuthService
     {
-        private readonly AuthOptions _authOptions;
         private readonly UserManager<User> _userManager;
-        private readonly UserService _userService;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IOptions<AuthOptions> authOptions, UserManager<User> userManager, UserService userService,IConfiguration configuration)
+        public AuthService(UserManager<User> userManager,IConfiguration configuration,RoleManager<IdentityRole<int>> roleManager)
         {
-            _authOptions = authOptions.Value;
             _userManager = userManager;
-            _userService = userService;
             _configuration = configuration;
+            _roleManager = roleManager;
         }
         public async Task<string?> Login(LoginDto loginDto)
         {
-        
             var user = await _userManager.FindByIdAsync(loginDto.Id);
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
                 return null;
             }
 
-// Create a list of claims to include in the JWT
+            // Получение ролей пользователя
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -41,7 +41,13 @@ namespace Library.Core.Service
                 new Claim(ClaimTypes.Name, user.UserName)
             };
 
-// Generate a JWT using the provided authentication options
+            // Добавление утверждений ролей
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            // Создание JWT токена
             var authOptions = _configuration.GetSection("AuthOptions").Get<AuthOptions>();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.Key));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -50,9 +56,9 @@ namespace Library.Core.Service
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-
-           
         }
+
+        
         // public async Task<string?> Login(LoginDto loginDto)
         // {
         //    //var user = await _userService.GetUserByEmailAsync(loginDto.Email);
@@ -76,13 +82,11 @@ namespace Library.Core.Service
         // }
 
 
-        public async Task<IdentityResult> Register(UserDto userDto)
+        public async Task<IdentityResult> Register(UserDto userDto, string[] roles = null)
         {
             var user = new User
             {
                 UserName = userDto.UserName,
-                
-                
                 Name = userDto.Name,
                 LastName = userDto.LastName,
                 Created = DateTime.UtcNow,
@@ -91,8 +95,43 @@ namespace Library.Core.Service
 
             var result = await _userManager.CreateAsync(user, userDto.Password);
 
+            // Назначение ролей пользователю
+            if (result.Succeeded && roles != null && roles.Any())
+            {
+                await _userManager.AddToRolesAsync(user, roles);
+            }
+
             return result;
         }
+        public async Task<IdentityResult> CreateRoleAsync(string roleName)
+        {
+            var role = new IdentityRole<int>(roleName);
+            return await _roleManager.CreateAsync(role);
+        }
+
+        public async Task<IdentityResult> AssignRoleToUserAsync(string userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null && await _roleManager.RoleExistsAsync(roleName))
+            {
+                return await _userManager.AddToRoleAsync(user, roleName);
+            }
+
+            return IdentityResult.Failed(new IdentityError { Description = "User not found or role does not exist." });
+        }
+
+        public async Task<IdentityResult> CreatePermissionAsync(string roleName, string permission)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role != null)
+            {
+                var claim = new Claim("Permission", permission);
+                return await _roleManager.AddClaimAsync(role, claim);
+            }
+
+            return IdentityResult.Failed(new IdentityError { Description = "Role not found." });
+        }
+
 
     }
 }

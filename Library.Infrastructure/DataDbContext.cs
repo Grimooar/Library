@@ -18,7 +18,6 @@ namespace Library.Infrastructure
             modelBuilder.Entity<BookInStock>().HasKey(b => b.Id);
             modelBuilder.Entity<Book>().HasKey(b => b.Id);
             modelBuilder.Entity<BookInAbonement>().HasKey(b => b.Id);
-            modelBuilder.Entity<User>().HasKey(b => b.Id);
         }
         public DbSet<Abonement> Abonement { get; set; }
         public DbSet<BookInAbonement> BookAbonement { get; set; }

@@ -35,7 +35,49 @@ namespace WebApi.Controllers
                 return BadRequest(result.Errors);
             }
         }
+        [HttpPost("createPermission")]
+        public async Task<IActionResult> CreatePermission(string roleName, string permission)
+        {
+            var result = await _authService.CreatePermissionAsync(roleName, permission);
 
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+        [HttpPost("assignRole")]
+        public async Task<IActionResult> AssignRoleToUser(string userId, string roleName)
+        {
+            var result = await _authService.AssignRoleToUserAsync(userId, roleName);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
+        [HttpPost("createRole")]
+        public async Task<IActionResult> CreateRole(string roleName)
+        {
+            var result = await _authService.CreateRoleAsync(roleName);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
 
         
         [HttpPost("login")]
