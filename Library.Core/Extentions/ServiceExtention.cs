@@ -16,6 +16,8 @@ public static class ServiceExtention
         services.AddScoped<BookInAbonementService>();
         services.AddScoped<AuthorService>();
         services.AddScoped<AbonementService>();
+        
+        
     } 
     
 
