@@ -35,9 +35,6 @@ class Program
         builder.Services.AddDbContext<DataDbContext>(options => options.UseSqlite("Filename=MyTestedDb.db"));
         
         builder.Services.AddRepositories();
-        /*builder.Services.AddIdentity<User,IdentityRole<int>>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();*/
         builder.Services.AddIdentity<User, IdentityRole<int>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
