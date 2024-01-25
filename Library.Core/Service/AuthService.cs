@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using ClassLibrary1;
 using Library.Models;
 using Microsoft.AspNetCore.Identity;
@@ -13,15 +14,17 @@ namespace Library.Core.Service
 {
     public class AuthService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User>? _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AuthService(UserManager<User> userManager,IConfiguration configuration,RoleManager<IdentityRole<int>> roleManager)
+        public AuthService(UserManager<User>? userManager,IConfiguration configuration,RoleManager<IdentityRole<int>> roleManager, IMapper mapper, UserManager<User> userManager1, UserManager<User> userManager2, UserManager<User> userManager3, UserManager<User> userManager4, UserManager<User> userManager5)
         {
             _userManager = userManager;
             _configuration = configuration;
             _roleManager = roleManager;
+            _mapper = mapper;
         }
         public async Task<string?> Login(LoginDto loginDto)
         {
@@ -82,27 +85,26 @@ namespace Library.Core.Service
         // }
 
 
-        public async Task<IdentityResult> Register(UserDto userDto, string[] roles = null)
+        public async Task<IdentityResult> Register(UserCreateDto userCreateDto, string[] roles = null)
         {
-            var user = new User
-            {
-                UserName = userDto.UserName,
-                Name = userDto.Name,
-                LastName = userDto.LastName,
-                Created = DateTime.UtcNow,
-                Email = userDto.Email
-            };
+            var user = _mapper.Map<User>(userCreateDto);
 
-            var result = await _userManager.CreateAsync(user, userDto.Password);
-
-            // Назначение ролей пользователю
-            if (result.Succeeded && roles != null && roles.Any())
+            if (_userManager != null)
             {
-                await _userManager.AddToRolesAsync(user, roles);
+                var result = await _userManager.CreateAsync(user, userCreateDto.Password);
+
+                // Назначение ролей пользователю
+                if (result.Succeeded && roles != null && roles.Any())
+                {
+                    await _userManager.AddToRolesAsync(user,new[] { "User" });
+                }
+
+                return result;
             }
 
-            return result;
+            return null;
         }
+
         public async Task<IdentityResult> CreateRoleAsync(string roleName)
         {
             var role = new IdentityRole<int>(roleName);

@@ -6,9 +6,6 @@ namespace Library.Models;
 
 public class User : IdentityUser<int>,ICreatedAtTrackedEntity, IKeyEntity<int>
 {
-
-    public int Id { get; set; }
-
     public string? Name { get; set; }
     public string? LastName { get; set; }
     public new string? Email { get; set; }

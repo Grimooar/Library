@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserDto userDto)
+        public async Task<IActionResult> Register(UserCreateDto userDto)
         {
             var result = await _authService.Register(userDto);
 
@@ -63,7 +63,7 @@ namespace WebApi.Controllers
                 return BadRequest(result.Errors);
             }
         }
-
+        
         [HttpPost("createRole")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
