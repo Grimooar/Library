@@ -9,6 +9,7 @@
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.26.1" />
 	</ItemGroup>
 
 	<ItemGroup>

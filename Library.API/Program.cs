@@ -5,6 +5,7 @@ using Library.Core.Extentions;
 using Library.Infrastructure;
 using Library.Infrastructure.Extentions;
 using Library.Models;
+using Library.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Extentions;
@@ -35,9 +36,7 @@ class Program
         builder.Services.AddDbContext<DataDbContext>(options => options.UseSqlite("Filename=MyTestedDb.db"));
         
         builder.Services.AddRepositories();
-        builder.Services.AddIdentity<User, IdentityRole<int>>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+     
 
 
 
@@ -70,8 +69,7 @@ class Program
         });
         var app = builder.Build(); 
         DataDbInitializer.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
-        ApplicationDbInitialize.Initialize(app.Services.GetRequiredService<IServiceProvider>().CreateScope().ServiceProvider);
-      
+       
         app.UseAuthentication();
         app.UseCors("DevCorsPolicy");
         app.UseRouting();
