@@ -1,0 +1,6 @@
+@startuml
+component [Library] as Library
+component [Identity] as Identity
+
+Identity --> Library: API Calls
+@enduml
