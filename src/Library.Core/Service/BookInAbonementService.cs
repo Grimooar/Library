@@ -20,7 +20,6 @@ public class BookInAbonementService
         _repository = repository;
         _mapper = mapper;
         _userRepository = userRepository;
-        _bookRepository = bookRepository;
         _bookInStockrepository = bookInStockrepository;
     }
 

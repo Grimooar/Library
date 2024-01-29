@@ -6,10 +6,6 @@ using Library.Infrastructure;
 using Library.Infrastructure.Extentions;
 using Library.Models;
 using Library.Shared;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using WebApi.Extentions;
-using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 
 namespace WebApi;
@@ -36,7 +32,6 @@ class Program
         builder.Services.AddDbContext<DataDbContext>(options => options.UseSqlite("Filename=MyTestedDb.db"));
         
         builder.Services.AddRepositories();
-     
 
 
 

@@ -1,5 +1,8 @@
-﻿
+
 namespace Identity.DTOs;
+using Library.Models;
+
+namespace ClassLibrary1;
 
 public class UserUpdateDto
 {
